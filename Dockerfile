@@ -5,7 +5,7 @@ ADD git-tag /git-tag
 ADD scripts/build.sh /build.sh
 ADD scripts/run.sh /run.sh
 
-RUN chmod +x /run.sh /build.sh && sync && sleep 1 && /build.sh
+RUN aptitude -f && chmod +x /run.sh /build.sh && sync && sleep 1 && /build.sh
 
 WORKDIR /
 
