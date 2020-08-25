@@ -4,33 +4,40 @@
 chown root:root /usr/share/netdata/web/ -R
 echo -n "" > /usr/share/netdata/web/version.txt
 
-# set up ssmtp
-if [[ $SSMTP_TO ]]; then
-cat << EOF > /etc/ssmtp/ssmtp.conf
-root=$SSMTP_TO
-mailhub=$SSMTP_SERVER:$SSMTP_PORT
-UseSTARTTLS=$SSMTP_TLS
-hostname=$SSMTP_HOSTNAME
-FromLineOverride=NO
+# set up msmtp
+if [[ $SMTP_TO ]]; then
+cat << EOF > /etc/msmtprc
+account default
+aliases /etc/msmtp_aliases
+from $SMTP_FROM
+host $SMTP_SERVER
+port $SMTP_PORT
+tls $SMTP_TLS
+tls_starttls $SMTP_STARTTLS
+tls_certcheck off
 EOF
 
-cat << EOF > /etc/ssmtp/revaliases
-netdata:netdata@$SSMTP_HOSTNAME:$SSMTP_SERVER:$SSMTP_PORT
-root:netdata@$SSMTP_HOSTNAME:$SSMTP_SERVER:$SSMTP_PORT
+cat << EOF > /etc/msmtp_aliases
+netdata: $SMTP_TO
+root: $SMTP_TO
 EOF
 fi
 
-if [[ $SSMTP_USER ]]; then
-cat << EOF >> /etc/ssmtp/ssmtp.conf
-AuthUser=$SSMTP_USER
+if [[ $SMTP_USER ]]; then
+cat << EOF >> /etc/msmtprc
+auth on
+user $SMTP_USER
 EOF
 fi
 
-if [[ $SSMTP_PASS ]]; then
-cat << EOF >> /etc/ssmtp/ssmtp.conf
-AuthPass=$SSMTP_PASS
+if [[ $SMTP_PASS ]]; then
+cat << EOF >> /etc/msmtprc
+password $SMTP_PASS
 EOF
 fi
+
+# copy conf from NETDATA_STOCK_CONFIG_DIR (normally under /usr/lib/netdata/conf.d) to NETDATA_USER_CONFIG_DIR (normally under /etc/netdata)
+cp /usr/lib/netdata/conf.d/health_alarm_notify.conf /etc/netdata
 
 if [[ $SLACK_WEBHOOK_URL ]]; then
 	sed -i -e "s@SLACK_WEBHOOK_URL=\"\"@SLACK_WEBHOOK_URL=\"${SLACK_WEBHOOK_URL}\"@" /etc/netdata/health_alarm_notify.conf
@@ -107,4 +114,5 @@ for f in /etc/netdata/override/*; do
 done
 
 # main entrypoint
+touch /etc/netdata/python.d.conf
 exec /usr/sbin/netdata -D -u root -s /host -p ${NETDATA_PORT} ${NETDATA_ARGS} "$@"

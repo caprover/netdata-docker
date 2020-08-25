@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 ADD git-tag /git-tag
 
@@ -10,7 +10,9 @@ RUN apt update && apt full-upgrade -y && chmod +x /run.sh /build.sh && sync && s
 
 WORKDIR /
 
-ENV NETDATA_PORT=19999 SSMTP_TLS=YES SSMTP_SERVER=smtp.gmail.com SSMTP_PORT=587 SSMTP_HOSTNAME=localhost
+ENV NETDATA_PORT=19999 SMTP_TLS=on SMTP_STARTTLS=on SMTP_SERVER=smtp.gmail.com SMTP_PORT=587 SMTP_FROM=localhost
 EXPOSE $NETDATA_PORT
+
+VOLUME /etc/netdata/override
 
 ENTRYPOINT ["/run.sh"]

@@ -23,4 +23,4 @@ docker buildx create --name mybuilder
 docker buildx use mybuilder
 
 # REMOVED linux/arm64 as debie:jessie isn't built for linux/arm64
-docker buildx build --platform linux/amd64,linux/arm -t $MY_IMAGE_NAME:latest -t $MY_IMAGE_NAME:$NETDATA_VERSION --push .
+docker buildx build --platform linux/amd64,linux/arm,linux/arm64 -t $MY_IMAGE_NAME:latest -t $MY_IMAGE_NAME:$NETDATA_VERSION --push .
