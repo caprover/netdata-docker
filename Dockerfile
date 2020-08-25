@@ -5,6 +5,7 @@ ADD git-tag /git-tag
 ADD scripts/build.sh /build.sh
 ADD scripts/run.sh /run.sh
 
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt full-upgrade -y && chmod +x /run.sh /build.sh && sync && sleep 1 && /build.sh
 
 WORKDIR /
