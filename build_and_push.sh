@@ -1,6 +1,10 @@
 #!/bin/sh
 
+# ensure you're not running it on local machine
+env
 
+
+# docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 MY_IMAGE_NAME="caprover/netdata"
 NETDATA_VERSION="v1.8.0"
 
