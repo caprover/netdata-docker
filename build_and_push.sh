@@ -1,5 +1,8 @@
 #!/bin/sh
 
+MY_IMAGE_NAME="caprover/netdata"
+NETDATA_VERSION="v1.8.0"
+
 # ensure you're not running it on local machine
 if [ -z "$CI" ] || [ -z "$GITHUB_REF" ]; then
     echo "Running on a local machine! Exiting!"
@@ -8,10 +11,7 @@ else
     echo "Running on CI"
 fi
 
-exit 0
-# docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-MY_IMAGE_NAME="caprover/netdata"
-NETDATA_VERSION="v1.8.0"
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
 echo "Deploying to Docker hub ..."
 
