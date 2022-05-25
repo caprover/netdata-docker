@@ -8,9 +8,10 @@ echo "deb http://ftp.nl.debian.org/debian/ stretch main" > /etc/apt/sources.list
 echo "deb http://security.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list
 
 # install dependencies for build
+# source: https://learn.netdata.cloud/docs/agent/packaging/installer/methods/manual
 
 apt-get -qq update
-apt-get -y install zlib1g-dev uuid-dev libmnl-dev gcc make curl git autoconf autogen automake pkg-config netcat-openbsd jq libuv1-dev liblz4-dev libjudy-dev libssl-dev
+apt-get -y install zlib1g-dev uuid-dev libmnl-dev gcc make curl git autoconf autogen automake pkg-config netcat-openbsd jq libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev libprotobuf-dev protobuf-compiler g++
 apt-get -y install autoconf-archive lm-sensors nodejs python python-mysqldb python-yaml libjudydebian1 libuv1 liblz4-1 openssl
 apt-get -y install msmtp msmtp-mta apcupsd fping
 
@@ -26,9 +27,13 @@ else
 	echo "No tag, using master"
 fi
 
+# fix for https://github.com/netdata/netdata/issues/11652
+
+git submodule update --init --recursive
+
 # use the provided installer
 
-./netdata-installer.sh --dont-wait --dont-start-it
+./netdata-installer.sh --dont-wait --dont-start-it --disable-telemetry
 
 # removed hack on 2017/1/3
 #chown root:root /usr/libexec/netdata/plugins.d/apps.plugin
@@ -39,7 +44,7 @@ fi
 cd /
 rm -rf /netdata.git
 
-dpkg -P zlib1g-dev uuid-dev libmnl-dev gcc make git autoconf autogen automake pkg-config libuv1-dev liblz4-dev libjudy-dev libssl-dev
+dpkg -P zlib1g-dev uuid-dev libmnl-dev make git autoconf autogen automake pkg-config libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev libprotobuf-dev protobuf-compiler g++
 apt-get -y autoremove
 apt-get clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
