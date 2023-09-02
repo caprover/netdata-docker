@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 
 ADD git-tag /git-tag
 
