@@ -15,7 +15,7 @@ apt-get install -y ca-certificates git-man netcat-openbsd krb5-locales less libb
 apt-get install -y autoconf autoconf-archive autogen automake cmake curl g++ gcc git gzip libatomic1 libuuid1 libelf-dev libjson-c-dev libjudy-dev liblz4-dev libmnl-dev libssl-dev libsystemd-dev libuv1-dev libyaml-dev lm-sensors make pkg-config python3 python3-mysqldb python3-yaml tar uuid-dev zlib1g-dev libprotobuf-dev protobuf-compiler && \
 apt-get install -y msmtp msmtp-mta apcupsd fping
 
-# fetch netdata
+# fetch netdata & replaced firehol obsoleted by netdata
 
 git clone https://github.com/netdata/netdata.git /netdata.git
 cd /netdata.git
