@@ -12,7 +12,8 @@ DEBIAN_FRONTEND=noninteractive
 
 apt-get update -qq && \
 apt-get install -y ca-certificates git-man netcat-openbsd krb5-locales less libbrotli1 libbsd0 libcbor0.8 libcurl3-gnutls libcurl4 libedit2 liberror-perl libexpat1 libfido2-1 libgdbm-compat4 libgdbm6 libgssapi-krb5-2 libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libldap-2.5-0 libldap-common libnghttp2-14 libperl5.36 libpsl5 librtmp1 libsasl2-2 libsasl2-modules libsasl2-modules-db libssh2-1 libssl3 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxext6 libxmuu1 netbase openssh-client openssl patch nodejs perl perl-modules-5.36 publicsuffix xauth && \
-apt-get install -y autoconf autoconf-archive autogen automake cmake curl g++ gcc git gzip libatomic1 libuuid1 libelf-dev libjson-c-dev libjudy-dev liblz4-dev libmnl-dev libssl-dev libsystemd-dev libuv1-dev libyaml-dev lm-sensors make pkg-config python3 python3-mysqldb python3-yaml tar uuid-dev zlib1g-dev libprotobuf-dev protobuf-compiler
+apt-get install -y autoconf autoconf-archive autogen automake cmake curl g++ gcc git gzip libatomic1 libuuid1 libelf-dev libjson-c-dev libjudy-dev liblz4-dev libmnl-dev libssl-dev libsystemd-dev libuv1-dev libyaml-dev lm-sensors make pkg-config python3 python3-mysqldb python3-yaml tar uuid-dev zlib1g-dev libprotobuf-dev protobuf-compiler && \
+apt-get install -y msmtp msmtp-mta apcupsd fping
 
 # fetch netdata
 
