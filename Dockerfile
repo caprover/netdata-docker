@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:bookworm
 
 ADD git-tag /git-tag
 

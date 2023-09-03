@@ -2,22 +2,22 @@
 set -e
 DEBIAN_FRONTEND=noninteractive
 
-# some mirrors have issues, i skipped httpredir in favor of an eu mirror
+# some mirrors have issues, i skipped httpredir in favor of an eu mirror, moved to bookworm, and they cause duplicates only.
 
-echo "deb http://ftp.nl.debian.org/debian/ stretch main" > /etc/apt/sources.list
-echo "deb http://security.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list
+# echo "deb http://deb.debian.org/debian/ bookworm main" > /etc/apt/sources.list
+# echo "deb http://security.debian.org/debian-security bookworm-security main" >> /etc/apt/sources.list
 
 # install dependencies for build
 # source: https://learn.netdata.cloud/docs/agent/packaging/installer/methods/manual
 
-apt-get -qq update
-apt-get -y install zlib1g-dev uuid-dev libmnl-dev gcc make curl git autoconf autogen automake pkg-config netcat-openbsd jq libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev libprotobuf-dev protobuf-compiler g++
-apt-get -y install autoconf-archive lm-sensors nodejs python python-mysqldb python-yaml libjudydebian1 libuv1 liblz4-1 openssl
-apt-get -y install msmtp msmtp-mta apcupsd fping
+apt-get update -qq && \
+apt-get install -y ca-certificates git-man netcat-openbsd krb5-locales less libbrotli1 libbsd0 libcbor0.8 libcurl3-gnutls libcurl4 libedit2 liberror-perl libexpat1 libfido2-1 libgdbm-compat4 libgdbm6 libgssapi-krb5-2 libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libldap-2.5-0 libldap-common libnghttp2-14 libperl5.36 libpsl5 librtmp1 libsasl2-2 libsasl2-modules libsasl2-modules-db libssh2-1 libssl3 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxext6 libxmuu1 netbase openssh-client openssl patch nodejs perl perl-modules-5.36 publicsuffix xauth && \
+apt-get install -y autoconf autoconf-archive autogen automake cmake curl g++ gcc git gzip libatomic1 libuuid1 libelf-dev libjson-c-dev libjudy-dev liblz4-dev libmnl-dev libssl-dev libsystemd-dev libuv1-dev libyaml-dev lm-sensors make pkg-config python3 python3-mysqldb python3-yaml tar uuid-dev zlib1g-dev libprotobuf-dev protobuf-compiler && \
+apt-get install -y msmtp msmtp-mta apcupsd fping
 
-# fetch netdata
+# fetch netdata & replaced firehol obsoleted by netdata
 
-git clone https://github.com/firehol/netdata.git /netdata.git
+git clone https://github.com/netdata/netdata.git /netdata.git
 cd /netdata.git
 TAG=$(</git-tag)
 if [ ! -z "$TAG" ]; then
@@ -35,20 +35,16 @@ git submodule update --init --recursive
 
 ./netdata-installer.sh --dont-wait --dont-start-it --disable-telemetry
 
-# removed hack on 2017/1/3
-#chown root:root /usr/libexec/netdata/plugins.d/apps.plugin
-#chmod 4755 /usr/libexec/netdata/plugins.d/apps.plugin
-
 # remove build dependencies
 
 cd /
 rm -rf /netdata.git
 
-dpkg -P zlib1g-dev uuid-dev libmnl-dev make git autoconf autogen automake pkg-config libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev libprotobuf-dev protobuf-compiler g++
+dpkg -P iproute2 libelf-dev libjudy-dev liblz4-dev libmnl-dev libprotobuf-dev libssl-dev libuv1-dev libyaml-dev lm-sensors make netcat-openbsd pkg-config protobuf-compiler python3-mysqldb python3-yaml uuid-dev zlib1g-dev
+
 apt-get -y autoremove
 apt-get clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 
 # symlink access log and error log to stdout/stderr
 
