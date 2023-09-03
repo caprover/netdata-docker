@@ -47,6 +47,11 @@ if [[ $SLACK_CHANNEL ]]; then
 	sed -i -e "s@DEFAULT_RECIPIENT_SLACK=\"\"@DEFAULT_RECIPIENT_SLACK=\"${SLACK_CHANNEL}\"@" /etc/netdata/health_alarm_notify.conf
 fi
 
+# Add this part for the SEND_SLACK="YES"
+if [[ $SLACK_WEBHOOK_URL && $SLACK_CHANNEL ]]; then
+	sed -i -e "s@SEND_SLACK=\"NO\"@SEND_SLACK=\"YES\"@" /etc/netdata/health_alarm_notify.conf
+fi
+
 if [[ $DISCORD_WEBHOOK_URL ]]; then
 	sed -i -e "s@DISCORD_WEBHOOK_URL=\"\"@DISCORD_WEBHOOK_URL=\"${DISCORD_WEBHOOK_URL}\"@" /etc/netdata/health_alarm_notify.conf
 fi
@@ -54,7 +59,12 @@ fi
 if [[ $DISCORD_RECIPIENT ]]; then
 	sed -i -e "s@DEFAULT_RECIPIENT_DISCORD=\"\"@DEFAULT_RECIPIENT_DISCORD=\"${DISCORD_RECIPIENT}\"@" /etc/netdata/health_alarm_notify.conf
 fi
+# Add this part for the SEND_DISCORD="YES"
+if [[ $DISCORD_WEBHOOK_URL && $DISCORD_RECIPIENT ]]; then
+	sed -i -e "s@SEND_DISCORD=\"NO\"@SEND_DISCORD=\"YES\"@" /etc/netdata/health_alarm_notify.conf
+fi
 
+# For Telegram
 if [[ $TELEGRAM_BOT_TOKEN ]]; then
 	sed -i -e "s@TELEGRAM_BOT_TOKEN=\"\"@TELEGRAM_BOT_TOKEN=\"${TELEGRAM_BOT_TOKEN}\"@" /etc/netdata/health_alarm_notify.conf
 fi
@@ -63,12 +73,23 @@ if [[ $TELEGRAM_CHAT_ID ]]; then
 	sed -i -e "s@DEFAULT_RECIPIENT_TELEGRAM=\"\"@DEFAULT_RECIPIENT_TELEGRAM=\"${TELEGRAM_CHAT_ID}\"@" /etc/netdata/health_alarm_notify.conf
 fi
 
+# Add this part for the SEND_TELEGRAM="YES"
+if [[ $TELEGRAM_BOT_TOKEN && $TELEGRAM_CHAT_ID ]]; then
+	sed -i -e "s@SEND_TELEGRAM=\"NO\"@SEND_TELEGRAM=\"YES\"@" /etc/netdata/health_alarm_notify.conf
+fi
+
+# For PushBullet
 if [[ $PUSHBULLET_ACCESS_TOKEN ]]; then
 	sed -i -e "s@PUSHBULLET_ACCESS_TOKEN=\"\"@PUSHBULLET_ACCESS_TOKEN=\"${PUSHBULLET_ACCESS_TOKEN}\"@" /etc/netdata/health_alarm_notify.conf
 fi
 
 if [[ $PUSHBULLET_DEFAULT_EMAIL ]]; then
 	sed -i -e "s#DEFAULT_RECIPIENT_PUSHBULLET=\"\"#DEFAULT_RECIPIENT_PUSHBULLET=\"${PUSHBULLET_DEFAULT_EMAIL}\"#" /etc/netdata/health_alarm_notify.conf
+fi
+
+# Add this part for the SEND_PUSHBULLET="YES"
+if [[ $PUSHBULLET_ACCESS_TOKEN && $PUSHBULLET_DEFAULT_EMAIL ]]; then
+	sed -i -e "s@SEND_PUSHBULLET=\"NO\"@SEND_PUSHBULLET=\"YES\"@" /etc/netdata/health_alarm_notify.conf
 fi
 
 if [[ $NETDATA_IP ]]; then
