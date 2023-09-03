@@ -4,19 +4,19 @@ DEBIAN_FRONTEND=noninteractive
 
 # some mirrors have issues, i skipped httpredir in favor of an eu mirror
 
-echo "deb http://ftp.nl.debian.org/debian/ buster main" > /etc/apt/sources.list
-echo "deb http://security.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian/ bullseye main" > /etc/apt/sources.list
+echo "deb http://security.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list
 
 # install dependencies for build
 # source: https://learn.netdata.cloud/docs/agent/packaging/installer/methods/manual
 
-apt-get -qq update && \
-apt-get -y install zlib1g-dev uuid-dev libuv1-dev liblz4-dev libssl-dev libyaml-dev libelf-dev libmnl-dev libprotobuf-dev protobuf-compiler gcc g++ make git autoconf autoconf-archive autogen automake pkg-config curl python cmake netcat-openbsd jq lm-sensors nodejs python-mysqldb python-yaml libjudydebian1 libuv1 liblz4-1 openssl msmtp msmtp-mta apcupsd fping && \
-apt-get clean
+apt-get -qq update
+apt-get -y install apcupsd autoconf autoconf-archive autogen automake cmake curl fping g++ gcc git jq libelf-dev libjudy-dev libjudydebian1 liblz4-1 liblz4-dev libmnl-dev libprotobuf-dev libssl-dev libuv1 libuv1-dev libyaml-dev lm-sensors make msmtp msmtp-mta netcat-openbsd nodejs openssl pkg-config protobuf-compiler python3-yaml python3-mysqldb openssl python3 uuid-dev zlib1g-dev
 
 # fetch netdata
+git config --global advice.detachedHead false
 
-git clone https://github.com/firehol/netdata.git /netdata.git
+git clone https://github.com/netdata/netdata.git /netdata.git
 cd /netdata.git
 TAG=$(</git-tag)
 if [ ! -z "$TAG" ]; then
@@ -43,7 +43,7 @@ git submodule update --init --recursive
 cd /
 rm -rf /netdata.git
 
-dpkg -P zlib1g-dev uuid-dev libmnl-dev make git autoconf autogen automake pkg-config libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev libprotobuf-dev protobuf-compiler g++
+dpkg -P zlib1g-dev uuid-dev libmnl-dev libyaml-dev make git autoconf autogen automake pkg-config libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev libprotobuf-dev protobuf-compiler g++
 apt-get -y autoremove
 apt-get clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

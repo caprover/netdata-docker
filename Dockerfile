@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 
 ADD git-tag /git-tag
 
