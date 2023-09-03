@@ -2,7 +2,7 @@
 set -e
 DEBIAN_FRONTEND=noninteractive
 
-# some mirrors have issues, i skipped httpredir in favor of an eu mirror
+# some mirrors have issues, i skipped httpredir in favor of an eu mirror, moved to bullseye
 
 echo "deb http://deb.debian.org/debian/ bullseye main" > /etc/apt/sources.list
 echo "deb http://security.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list
@@ -12,10 +12,12 @@ echo "deb http://security.debian.org/debian-security bullseye-security main" >> 
 
 apt-get -qq update
 apt-get -y install apcupsd autoconf autoconf-archive autogen automake cmake curl fping g++ gcc git jq libelf-dev libjudy-dev libjudydebian1 liblz4-1 liblz4-dev libmnl-dev libprotobuf-dev libssl-dev libuv1 libuv1-dev libyaml-dev lm-sensors make msmtp msmtp-mta netcat-openbsd nodejs openssl pkg-config protobuf-compiler python3-yaml python3-mysqldb openssl python3 uuid-dev zlib1g-dev
-apt-get auto-clean -y
+
+# fix the extra warning when building netdata
+
+git config --global advice.detachedHead false
 
 # fetch netdata
-git config --global advice.detachedHead false
 
 git clone https://github.com/netdata/netdata.git /netdata.git
 cd /netdata.git
@@ -35,9 +37,6 @@ git submodule update --init --recursive
 
 ./netdata-installer.sh --dont-wait --dont-start-it --disable-telemetry
 
-# removed hack on 2017/1/3
-#chown root:root /usr/libexec/netdata/plugins.d/apps.plugin
-#chmod 4755 /usr/libexec/netdata/plugins.d/apps.plugin
 
 # remove build dependencies
 
