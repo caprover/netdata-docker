@@ -11,7 +11,7 @@ echo "deb http://security.debian.org/debian-security bullseye-security main" >> 
 # source: https://learn.netdata.cloud/docs/agent/packaging/installer/methods/manual
 
 apt-get -qq update && \
-apt-get -y install apcupsd autoconf autoconf-archive autogen automake bash cmake curl fping g++ gcc git iproute2 jq libelf-dev libelf1 libjudy-dev libjudydebian1 liblz4-1 liblz4-dev libmnl-dev libprotobuf-dev libssl-dev libuuid libuv1 libuv1-dev libyaml-dev lm-sensors make msmtp msmtp-mta netcat-openbsd nodejs openssl pkg-config protobuf-compiler python python-mysqldb python-yaml python3 python3-mysqldb python3-yaml util-linux uuid-dev zlib zlib1g-dev && \
+apt-get -y install apcupsd autoconf autoconf-archive autogen automake bash cmake curl fping g++ gcc git iproute2 jq libelf-dev libelf1 libjudy-dev libjudydebian1 liblz4-1 liblz4-dev libmnl-dev libprotobuf-dev libssl-dev libuuid libuv1 libuv1-dev libyaml-dev lm-sensors make msmtp msmtp-mta netcat-openbsd nodejs openssl pkg-config protobuf-compiler python3 python3-mysqldb python3-yaml util-linux uuid-dev zlib zlib1g-dev && \
 apt-get clean -y
 
 # fix the extra warning when building netdata
