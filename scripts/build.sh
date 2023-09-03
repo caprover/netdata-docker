@@ -12,6 +12,7 @@ echo "deb http://security.debian.org/debian-security bullseye-security main" >> 
 
 apt-get -qq update
 apt-get -y install apcupsd autoconf autoconf-archive autogen automake cmake curl fping g++ gcc git jq libelf-dev libjudy-dev libjudydebian1 liblz4-1 liblz4-dev libmnl-dev libprotobuf-dev libssl-dev libuv1 libuv1-dev libyaml-dev lm-sensors make msmtp msmtp-mta netcat-openbsd nodejs openssl pkg-config protobuf-compiler python3-yaml python3-mysqldb openssl python3 uuid-dev zlib1g-dev
+apt-get auto-clean -y
 
 # fetch netdata
 git config --global advice.detachedHead false
