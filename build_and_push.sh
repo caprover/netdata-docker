@@ -23,4 +23,4 @@ docker buildx create --name mybuilder
 docker buildx use mybuilder
 
 # REMOVED linux/arm, and all 32 bit. Just focus on x86_64
-docker buildx build --platform linux/amd64,linux/arm64 -t $MY_IMAGE_NAME:latest -t $MY_IMAGE_NAME:$NETDATA_VERSION --push .
+docker buildx build --platform linux/amd64,linux/arm,linux/arm64,linux/386 -t $MY_IMAGE_NAME:latest -t $MY_IMAGE_NAME:$NETDATA_VERSION --push .
