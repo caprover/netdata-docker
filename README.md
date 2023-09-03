@@ -2,4 +2,4 @@
 
 Just a think wrapper for NetData that enables the user to use env vars for parameter setting. Based on https://github.com/titpetric/netdata with the exception that this is built as an multiarch image
 
-See https://hub.docker.com/r/uhlhosting/netdata
+See https://hub.docker.com/r/caprover/netdata
