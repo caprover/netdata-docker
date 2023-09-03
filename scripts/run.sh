@@ -67,17 +67,17 @@ if [[ $SLACK_WEBHOOK_URL && $SLACK_CHANNEL ]]; then
 	sed -i -e "s@SEND_SLACK=\"NO\"@SEND_SLACK=\"YES\"@" /etc/netdata/health_alarm_notify.conf
 fi
 
-if [[ $DISCORD_WEBHOOK_URL ]]; then
-	sed -i -e "s@DISCORD_WEBHOOK_URL=\"\"@DISCORD_WEBHOOK_URL=\"${DISCORD_WEBHOOK_URL}\"@" /etc/netdata/health_alarm_notify.conf
-fi
+# if [[ $DISCORD_WEBHOOK_URL ]]; then
+# 	sed -i -e "s@DISCORD_WEBHOOK_URL=\"\"@DISCORD_WEBHOOK_URL=\"${DISCORD_WEBHOOK_URL}\"@" /etc/netdata/health_alarm_notify.conf
+# fi
 
-if [[ $DISCORD_RECIPIENT ]]; then
-	sed -i -e "s@DEFAULT_RECIPIENT_DISCORD=\"\"@DEFAULT_RECIPIENT_DISCORD=\"${DISCORD_RECIPIENT}\"@" /etc/netdata/health_alarm_notify.conf
-fi
-# Add this part for the SEND_DISCORD="YES"
-if [[ $DISCORD_WEBHOOK_URL && $DISCORD_RECIPIENT ]]; then
-	sed -i -e "s@SEND_DISCORD=\"NO\"@SEND_DISCORD=\"YES\"@" /etc/netdata/health_alarm_notify.conf
-fi
+# if [[ $DISCORD_RECIPIENT ]]; then
+# 	sed -i -e "s@DEFAULT_RECIPIENT_DISCORD=\"\"@DEFAULT_RECIPIENT_DISCORD=\"${DISCORD_RECIPIENT}\"@" /etc/netdata/health_alarm_notify.conf
+# fi
+# # Add this part for the SEND_DISCORD="YES"
+# if [[ $DISCORD_WEBHOOK_URL && $DISCORD_RECIPIENT ]]; then
+# 	sed -i -e "s@SEND_DISCORD=\"NO\"@SEND_DISCORD=\"YES\"@" /etc/netdata/health_alarm_notify.conf
+# fi
 
 # For Telegram
 if [[ $TELEGRAM_BOT_TOKEN ]]; then
