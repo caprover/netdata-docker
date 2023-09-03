@@ -38,17 +38,16 @@ git submodule update --init --recursive
 
 ./netdata-installer.sh --dont-wait --dont-start-it --disable-telemetry
 
-
 # remove build dependencies
 
 cd /
 rm -rf /netdata.git
 
-dpkg -P zlib1g-dev uuid-dev libmnl-dev libyaml-dev make git autoconf autogen automake pkg-config libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev iproute2 libprotobuf-dev protobuf-compiler g++
+dpkg -P autoconf autogen automake bash cmake curl g++ git iproute2 libelf-dev libjudy-dev liblz4-dev libmnl-dev libprotobuf-dev libssl-dev libuuid libuv1-dev libyaml-dev lm-sensors make netcat-openbsd nodejs openssl pkg-config protobuf-compiler python3 python3-mysqldb python3-yaml uuid-dev zlib1g-dev
+
 apt-get -y autoremove
 apt-get clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 
 # symlink access log and error log to stdout/stderr
 
