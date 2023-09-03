@@ -39,6 +39,21 @@ fi
 # copy conf from NETDATA_STOCK_CONFIG_DIR (normally under /usr/lib/netdata/conf.d) to NETDATA_USER_CONFIG_DIR (normally under /etc/netdata)
 cp /usr/lib/netdata/conf.d/health_alarm_notify.conf /etc/netdata
 
+# For EMAIL_SENDER, assuming the value comes from netDataInfo.data.smtp.sender
+if [[ $SMTP_SENDER ]]; then
+	sed -i -e "s@EMAIL_SENDER=\"\"@EMAIL_SENDER=\"${SMTP_SENDER}\"@" /etc/netdata/health_alarm_notify.conf
+fi
+
+# For DEFAULT_RECIPIENT_EMAIL, assuming the value comes from netDataInfo.data.smtp.to
+if [[ $SMTP_TO ]]; then
+	sed -i -e "s@DEFAULT_RECIPIENT_EMAIL=\"\"@DEFAULT_RECIPIENT_EMAIL=\"${SMTP_TO}\"@" /etc/netdata/health_alarm_notify.conf
+fi
+
+# For enabling email, set SEND_EMAIL to YES if both SMTP_SENDER and SMTP_TO are set
+if [[ $SMTP_SENDER && $SMTP_TO ]]; then
+	sed -i -e "s@SEND_EMAIL=\"NO\"@SEND_EMAIL=\"YES\"@" /etc/netdata/health_alarm_notify.conf
+fi
+
 if [[ $SLACK_WEBHOOK_URL ]]; then
 	sed -i -e "s@SLACK_WEBHOOK_URL=\"\"@SLACK_WEBHOOK_URL=\"${SLACK_WEBHOOK_URL}\"@" /etc/netdata/health_alarm_notify.conf
 fi
