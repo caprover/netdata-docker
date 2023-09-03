@@ -10,8 +10,8 @@ echo "deb http://security.debian.org/debian-security buster/updates main" >> /et
 # install dependencies for build
 # source: https://learn.netdata.cloud/docs/agent/packaging/installer/methods/manual
 
-apt-get -qq update
-apt-get -y install zlib1g-dev uuid-dev libuv1-dev liblz4-dev libssl-dev libyaml-dev libelf-dev libmnl-dev libprotobuf-dev protobuf-compiler gcc g++ make git autoconf autoconf-archive autogen automake pkg-config curl python cmake netcat-openbsd jq lm-sensors nodejs python-mysqldb python-yaml libjudydebian1 libuv1 liblz4-1 openssl msmtp msmtp-mta apcupsd fping
+apt-get -qq update && \
+apt-get -y install zlib1g-dev uuid-dev libuv1-dev liblz4-dev libssl-dev libyaml-dev libelf-dev libmnl-dev libprotobuf-dev protobuf-compiler gcc g++ make git autoconf autoconf-archive autogen automake pkg-config curl python cmake netcat-openbsd jq lm-sensors nodejs python-mysqldb python-yaml libjudydebian1 libuv1 liblz4-1 openssl msmtp msmtp-mta apcupsd fping && \
 apt-get clean
 
 # fetch netdata
