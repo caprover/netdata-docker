@@ -109,10 +109,6 @@ if [[ -d "/fakenet/" ]]; then
 	sleep 1
 fi
 
-for f in /etc/netdata/override/*; do
-  cp -a $f /etc/netdata/
-done
-
 # main entrypoint
 touch /etc/netdata/python.d.conf
 exec /usr/sbin/netdata -D -u root -s /host -p ${NETDATA_PORT} ${NETDATA_ARGS} "$@"
