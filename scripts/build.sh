@@ -4,15 +4,16 @@ DEBIAN_FRONTEND=noninteractive
 
 # some mirrors have issues, i skipped httpredir in favor of an eu mirror
 
-echo "deb http://ftp.nl.debian.org/debian/ stretch main" > /etc/apt/sources.list
-echo "deb http://security.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian/ bullseye main" > /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian/ bullseye-updates main" >> /etc/apt/sources.list
 
 # install dependencies for build
 # source: https://learn.netdata.cloud/docs/agent/packaging/installer/methods/manual
 
 apt-get -qq update
 apt-get -y install zlib1g-dev uuid-dev libmnl-dev gcc make curl git autoconf autogen automake pkg-config netcat-openbsd jq libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev libprotobuf-dev protobuf-compiler g++
-apt-get -y install autoconf-archive lm-sensors nodejs python python-mysqldb python-yaml libjudydebian1 libuv1 liblz4-1 openssl
+apt-get -y install autoconf-archive lm-sensors nodejs python3 python3-mysqldb python3-yaml libjudydebian1 libuv1 liblz4-1 openssl
 apt-get -y install msmtp msmtp-mta apcupsd fping
 
 # fetch netdata
