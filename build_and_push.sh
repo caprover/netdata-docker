@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MY_IMAGE_NAME="caprover/netdata"
-NETDATA_VERSION="v1.47.5"
+NETDATA_VERSION="v1.34.1"
 
 # ensure you're not running it on local machine
 if [ -z "$CI" ] || [ -z "$GITHUB_REF" ]; then
