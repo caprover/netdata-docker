@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:stretch
 
 ADD git-tag /git-tag
 
