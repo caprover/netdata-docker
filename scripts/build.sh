@@ -1,58 +1,48 @@
-#!/bin/bash
+#!/bin/sh
 set -e
-DEBIAN_FRONTEND=noninteractive
 
-# some mirrors have issues, i skipped httpredir in favor of an eu mirror
+# Configuration
+MY_IMAGE_NAME="caprover/netdata"
+NETDATA_VERSION="1.47.5"
 
-echo "deb http://deb.debian.org/debian/ bullseye main" > /etc/apt/sources.list
-echo "deb http://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list
-echo "deb http://deb.debian.org/debian/ bullseye-updates main" >> /etc/apt/sources.list
-
-# install dependencies for build
-# source: https://learn.netdata.cloud/docs/agent/packaging/installer/methods/manual
-
-apt-get -qq update
-apt-get -y install zlib1g-dev uuid-dev libmnl-dev gcc make curl git autoconf autogen automake pkg-config netcat-openbsd jq libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev libprotobuf-dev protobuf-compiler g++
-apt-get -y install autoconf-archive lm-sensors nodejs python3 python3-mysqldb python3-yaml libjudydebian1 libuv1 liblz4-1 openssl
-apt-get -y install msmtp msmtp-mta apcupsd fping
-
-# fetch netdata
-
-git clone https://github.com/firehol/netdata.git /netdata.git
-cd /netdata.git
-TAG=$(</git-tag)
-if [ ! -z "$TAG" ]; then
-	echo "Checking out tag: $TAG"
-	git checkout tags/$TAG
+# Safety check: only run in CI
+if [ -z "$CI" ] || [ -z "$GITHUB_REF" ]; then
+    echo "❌ Running on a local machine! Exiting!"
+    exit 127
 else
-	echo "No tag, using master"
+    echo "✅ Running on CI"
 fi
 
-# fix for https://github.com/netdata/netdata/issues/11652
+# Enable Docker Buildx
+export DOCKER_BUILDKIT=1
+export DOCKER_CLI_EXPERIMENTAL=enabled
 
-git submodule update --init --recursive
+echo "=========================================="
+echo "Building Netdata Docker Image"
+echo "Version: ${NETDATA_VERSION}"
+echo "Image: ${MY_IMAGE_NAME}"
+echo "=========================================="
 
-# use the provided installer
+# Setup QEMU for multi-arch builds
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
-./netdata-installer.sh --dont-wait --dont-start-it --disable-telemetry
+# Create and use buildx builder
+docker buildx create --name mybuilder --use || docker buildx use mybuilder
 
-# removed hack on 2017/1/3
-#chown root:root /usr/libexec/netdata/plugins.d/apps.plugin
-#chmod 4755 /usr/libexec/netdata/plugins.d/apps.plugin
+# Build and push multi-arch image
+echo "Building for multiple architectures..."
+docker buildx build \
+  --platform linux/amd64,linux/arm/v7,linux/arm64,linux/386 \
+  --progress=plain \
+  --build-arg NETDATA_VERSION=${NETDATA_VERSION} \
+  -t ${MY_IMAGE_NAME}:latest \
+  -t ${MY_IMAGE_NAME}:${NETDATA_VERSION} \
+  --push \
+  .
 
-# remove build dependencies
-
-cd /
-rm -rf /netdata.git
-
-dpkg -P zlib1g-dev uuid-dev libmnl-dev make git autoconf autogen automake pkg-config libuv1-dev liblz4-dev libjudy-dev libssl-dev cmake libelf-dev libprotobuf-dev protobuf-compiler g++
-apt-get -y autoremove
-apt-get clean
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-
-# symlink access log and error log to stdout/stderr
-
-ln -sf /dev/stdout /var/log/netdata/access.log
-ln -sf /dev/stdout /var/log/netdata/debug.log
-ln -sf /dev/stderr /var/log/netdata/error.log
+echo "=========================================="
+echo "✅ Build complete!"
+echo "Images pushed:"
+echo "  - ${MY_IMAGE_NAME}:latest"
+echo "  - ${MY_IMAGE_NAME}:${NETDATA_VERSION}"
+echo "=========================================="
